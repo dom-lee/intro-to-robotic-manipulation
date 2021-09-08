@@ -27,6 +27,7 @@ def generate_edges(n, phi):
         theta = 2 * np.pi * i / n
         cone_edges[i] = [np.cos(theta)*np.cos(phi), np.sin(theta)*np.cos(phi), np.sin(phi)]
     # ------------------------------------------------
+    assert isinstance(cone_edges, np.ndarray), 'Wrong return type for generate_edges. Make sure it is a np.ndarray'
     return cone_edges
 
 
@@ -45,6 +46,7 @@ def compute_normals(cone_edges):
     # ------------------------------------------------
     facet_normals = np.cross(cone_edges, np.roll(cone_edges, -1, axis=0))
     # ------------------------------------------------
+    assert isinstance(facet_normals, np.ndarray), 'Wrong return type for compute_normals. Make sure it is a np.ndarray'
     return facet_normals
 
 
@@ -64,8 +66,9 @@ def compute_minimum_distance_from_facet_normals(a, facet_normals):
     """
     # ------------------------------------------------
     normalized_facet_normals = facet_normals / np.linalg.norm(facet_normals, ord=2, axis=1, keepdims=True)
-    minimum_distance = np.abs(np.matmul(normalized_facet_normals, a)).min()
+    minimum_distance = min(np.abs(np.matmul(normalized_facet_normals, a)))
     # ------------------------------------------------
+    assert isinstance(minimum_distance, float), 'Wrong return type for compute_minimum_distance_from_facet_normals. Make sure it is a float'
     return minimum_distance
 
 
@@ -89,6 +92,7 @@ def compute_minimum_distance(a, n, phi):
     facet_normals = compute_normals(cone_edges)
     minimum_distance = compute_minimum_distance_from_facet_normals(a, facet_normals)
     # ------------------------------------------------
+    assert isinstance(minimum_distance, float), 'Wrong return type for compute_minimum_distance_from_facet_normals. Make sure it is a float'
     return minimum_distance
 
 
@@ -113,6 +117,7 @@ def check_is_interior_point(a, n, phi):
 
     is_interior_point = np.min(np.matmul(facet_normals, a)) > 0
     # ------------------------------------------------
+    assert isinstance(is_interior_point, bool), 'Wrong return type for check_is_interior_point. Make sure it is a bool'
     return is_interior_point
 
 
@@ -129,4 +134,3 @@ if __name__ == "__main__":
     # doctest.run_docstring_examples(compute_minimum_distance_from_facet_normals, globals(), verbose=True)  # Uncomment to test compute_minimum_distance_from_facet_normals
     # doctest.run_docstring_examples(compute_minimum_distance, globals(), verbose=True) # Uncomment to test compute_minimum_distance
     # doctest.run_docstring_examples(check_is_interior_point, globals(), verbose=True)  # Uncomment to test check_is_interior_point
-
